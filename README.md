@@ -46,17 +46,17 @@ __Instrucciones de uso:__
 
 **Características del Proyecto**
 
-*Carga y limpieza de datos:* Procesamiento inicial de los datos de películas para hacerlos adecuados para el análisis.
+<u> Carga y limpieza de datos:</u> Procesamiento inicial de los datos de películas para hacerlos adecuados para el análisis.
 
-*Análisis exploratorio de datos (EDA):* Gráficas y visualizaciones, incluyendo una nube de palabras de títulos de películas.
+<u>Análisis exploratorio de datos (EDA):</u> Gráficas y visualizaciones, incluyendo una nube de palabras de títulos de películas.
 
-*Creación de features: Extracción de características como director, género, país, y el promedio de votos para mejorar las recomendaciones.
+<u>Creación de features:</u> Extracción de características como director, género, país, y el promedio de votos para mejorar las recomendaciones.
 
-*Procesamiento de lenguaje natural (NLP):* Vectorización de resúmenes de películas para encontrar similitudes en el contenido.
+<u>Procesamiento de lenguaje natural (NLP):</u> Vectorización de resúmenes de películas para encontrar similitudes en el contenido.
 
-*Sistema de recomendación:* Desarrollo de un modelo de recomendación utilizando similitud de coseno para encontrar películas relacionadas.
+<u>Sistema de recomendación:</u> Desarrollo de un modelo de recomendación utilizando similitud de coseno para encontrar películas relacionadas.
 
-*Despliegue de API:* Implementación de la API con FastAPI, que permite obtener recomendaciones y otros datos relevantes.
+<u>Despliegue de API:</u> Implementación de la API con FastAPI, que permite obtener recomendaciones y otros datos relevantes.
 
-*Deploy en Render:* Despliegue de la API para que esté disponible en línea.
+<u>Deploy en Render:</u> Despliegue de la API para que esté disponible en línea.
 
