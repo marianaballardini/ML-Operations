@@ -9,11 +9,11 @@ Este proyecto utiliza técnicas de procesamiento de lenguaje natural y aprendiza
 
 **Tecnologías utilizadas:**
 
-Python
-FastAPI
-Pandas
-Scikit-learn
-Uvicorn
+Python/
+FastAPI/
+Pandas/
+Scikit-learn/
+Uvicorn/
 
 
 
