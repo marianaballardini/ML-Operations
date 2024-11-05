@@ -1,4 +1,3 @@
 fastapi
-unicodedata
 pandas
 scikit-learn
