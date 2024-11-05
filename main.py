@@ -1,12 +1,8 @@
 from fastapi import FastAPI, HTTPException
+import pandas as pd
 import unicodedata
-from modelo import ModeloRecomendacion
 
-# Inicializar FastAPI
 app = FastAPI()
-
-# Crear una instancia del modelo de recomendación
-modelo = ModeloRecomendacion("dataset_ok.parquet")
 
 # Normalizar texto eliminando tildes y caracteres diacríticos
 def normalizar_texto(texto: str) -> str:
@@ -28,7 +24,9 @@ def cantidad_filmaciones_mes(mes: str):
     if mes_num is None:
         raise HTTPException(status_code=404, detail="Mes no válido")
     
-    cantidad = modelo.df[modelo.df["release_date"].dt.month == mes_num].shape[0]
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["release_date"])
+    cantidad = df[df["release_date"].dt.month == mes_num].shape[0]
     return {"mensaje": f"{cantidad} películas fueron estrenadas en el mes de {mes.capitalize()}"}
 
 # 2. Endpoint para cantidad de filmaciones por día
@@ -44,14 +42,18 @@ def cantidad_filmaciones_dia(dia: str):
     if dia_num is None:
         raise HTTPException(status_code=404, detail="Día no válido")
     
-    cantidad = modelo.df[modelo.df["release_date"].dt.dayofweek == dia_num].shape[0]
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["release_date"])
+    cantidad = df[df["release_date"].dt.dayofweek == dia_num].shape[0]
     return {"mensaje": f"{cantidad} películas fueron estrenadas en los días {dia.capitalize()}"}
 
 # 3. Endpoint para score de un título
 @app.get('/score_titulo/{titulo}')
 def score_titulo(titulo: str):
     titulo_normalizado = normalizar_texto(titulo.lower())
-    pelicula = modelo.df[modelo.df["title"] == titulo_normalizado]
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["title", "release_year", "vote_average"])
+    pelicula = df[df["title"].str.lower() == titulo_normalizado]
     
     if pelicula.empty:
         raise HTTPException(status_code=404, detail="Título no encontrado")
@@ -65,7 +67,9 @@ def score_titulo(titulo: str):
 @app.get('/votos_titulo/{titulo}')
 def votos_titulo(titulo: str):
     titulo_normalizado = normalizar_texto(titulo.lower())
-    pelicula = modelo.df[modelo.df["title"] == titulo_normalizado]
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["title", "release_year", "vote_count", "vote_average"])
+    pelicula = df[df["title"].str.lower() == titulo_normalizado]
     
     if pelicula.empty:
         raise HTTPException(status_code=404, detail="Título no encontrado")
@@ -83,17 +87,11 @@ def votos_titulo(titulo: str):
 # 5. Endpoint información de actor
 @app.get("/actor/{nombre_actor}")
 def get_actor(nombre_actor: str):
-    """Busca información sobre un actor en la base de datos y calcula estadísticas."""
     nombre_actor_normalizado = normalizar_texto(nombre_actor.lower())
-
-    es_solo_actor = (modelo.df['actor_names'].str.contains(nombre_actor_normalizado, case=False, na=False)).any() and \
-                   not (modelo.df['director_names'].str.contains(nombre_actor_normalizado, case=False, na=False)).any()
-
-    if not es_solo_actor:
-        return {"mensaje": "El actor buscado no está en la base de datos o es además director, por lo que se excluye del análisis."}
-
-    peliculas_actor = modelo.df[modelo.df['actor_names'].str.contains(nombre_actor_normalizado, case=False, na=False)]
-
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["actor_names", "return"])
+    
+    peliculas_actor = df[df['actor_names'].str.contains(nombre_actor_normalizado, case=False, na=False)]
     cantidad_peliculas = len(peliculas_actor)
     retorno_total = peliculas_actor["return"].sum()
     promedio_retorno = retorno_total / cantidad_peliculas if cantidad_peliculas > 0 else 0
@@ -107,8 +105,10 @@ def get_actor(nombre_actor: str):
 @app.get('/get_director/{nombre_director}')
 def get_director(nombre_director: str):
     nombre_director_normalizado = normalizar_texto(nombre_director.lower())
+    # Cargar solo las columnas necesarias bajo demanda
+    df = pd.read_parquet("dataset_ok.parquet", columns=["director_names", "title", "release_date", "return", "budget", "revenue"])
     
-    peliculas_director = modelo.df[modelo.df["director_names"].str.contains(nombre_director_normalizado, na=False)]
+    peliculas_director = df[df["director_names"].str.contains(nombre_director_normalizado, na=False)]
     
     if peliculas_director.empty:
         raise HTTPException(status_code=404, detail="Director no encontrado")
@@ -128,5 +128,3 @@ def get_director(nombre_director: str):
         "mensaje": f"El director {nombre_director.capitalize()} tiene las siguientes películas:",
         "peliculas": info_peliculas
     }
-
-
