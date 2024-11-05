@@ -1,5 +1,4 @@
-ast
-pandas
-unicodedata
 fastapi
+unicodedata
+pandas
 scikit-learn
