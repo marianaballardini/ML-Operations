@@ -7,19 +7,8 @@ class ModeloRecomendacion:
         self.dataset_path = dataset_path
         self.df = None
         self.similarity_matrix = None
-        self.cargar_datos()  # Cargar el DataFrame al inicializar la clase
-
-    def cargar_datos(self):
-        """Carga el DataFrame desde el archivo parquet."""
-        try:
-            self.df = pd.read_parquet(self.dataset_path)
-            print("Columnas disponibles:", self.df.columns)  # Verifica las columnas cargadas
-            if self.df is None or self.df.empty:
-                print("El DataFrame está vacío o no se ha cargado correctamente.")
-        except Exception as e:
-            print(f"Error al cargar el archivo: {e}")
-            self.df = None
-
+        
+    
     def preprocesar_datos(self):
         """Preprocesa los datos para crear la matriz de similitud."""
         if self.df is None or 'features' not in self.df.columns:
@@ -66,8 +55,7 @@ class ModeloRecomendacion:
 
     def obtener_info_actor(self, nombre_actor):
         """Obtiene información sobre un actor en la base de datos y calcula estadísticas."""
-        if self.df is None:
-            raise ValueError("El DataFrame no se ha cargado. Verifique el archivo de datos.")
+        self.cargar_columnas_necesarias(['director_names', 'actor_names', 'return'])  # Cargar solo columnas necesarias
 
         # Verifica si el actor también es director
         es_director = self.df['director_names'].str.contains(nombre_actor, case=False, na=False).any()
@@ -89,20 +77,24 @@ class ModeloRecomendacion:
         }
 
     def obtener_info_director(self, nombre_director):
-            """Obtiene información sobre un director en la base de datos y filtra sus películas."""
-            # Filtra las películas del director
-            peliculas_director = self.df[self.df['director_names'].str.contains(nombre_director, case=False, na=False)]
-            
-            cantidad_peliculas = len(peliculas_director)
-            
-            if cantidad_peliculas == 0:
-                return None  # Si no hay películas del director, retorna None
-            
-            return peliculas_director[['title', 'release_year', 'vote_average']].to_dict(orient='records')
+        """Obtiene información sobre un director en la base de datos y filtra sus películas."""
+        self.cargar_columnas_necesarias(['director_names', 'title', 'release_year', 'vote_average'])  # Cargar solo columnas necesarias
+
+        # Filtramos las películas del director
+        peliculas_director = self.df[self.df['director_names'].str.contains(nombre_director, case=False, na=False)]
+        
+        cantidad_peliculas = len(peliculas_director)
+        
+        if cantidad_peliculas == 0:
+            return None  # Si no hay películas del director, retorna None
+        
+        return peliculas_director[['title', 'release_year', 'vote_average']].to_dict(orient='records')
     
+
     def recomendar(self, titulo):
         """Recomienda películas similares a partir de un título."""
-        # Asegúrate de que los datos estén preprocesados antes de usar
+        self.cargar_columnas_necesarias(['title', 'vote_average', 'vote_average_scaled', 'features'])  # Cargar solo columnas necesarias
+                
         if self.similarity_matrix is None:
             self.preprocesar_datos()
 
