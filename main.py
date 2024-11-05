@@ -17,10 +17,8 @@ def normalizar_texto(texto: str) -> str:
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes: str):
     meses = {
-        "enero": 1, "febrero": 2, "marzo": 3,
-        "abril": 4, "mayo": 5, "junio": 6,
-        "julio": 7, "agosto": 8, "septiembre": 9,
-        "octubre": 10, "noviembre": 11, "diciembre": 12
+        "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
+        "julio": 7, "agosto": 8, "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
     }
     mes_normalizado = normalizar_texto(mes.lower())
     mes_num = meses.get(mes_normalizado)
@@ -28,8 +26,7 @@ def cantidad_filmaciones_mes(mes: str):
     if mes_num is None:
         raise HTTPException(status_code=404, detail="Mes no válido")
     
-    df = modelo.cargar_datos(["release_date"])
-    cantidad = df[df["release_date"].dt.month == mes_num].shape[0]
+    cantidad = modelo.obtener_cantidad_por_mes(mes_num)
     return {"mensaje": f"{cantidad} películas fueron estrenadas en el mes de {mes.capitalize()}"}
 
 # 2. Endpoint para cantidad de filmaciones por día
@@ -45,89 +42,72 @@ def cantidad_filmaciones_dia(dia: str):
     if dia_num is None:
         raise HTTPException(status_code=404, detail="Día no válido")
     
-    df = modelo.cargar_datos(["release_date"])
-    cantidad = df[df["release_date"].dt.dayofweek == dia_num].shape[0]
+    cantidad = modelo.obtener_cantidad_por_dia(dia_num)
     return {"mensaje": f"{cantidad} películas fueron estrenadas en los días {dia.capitalize()}"}
 
-# 3. Endpoint para score de un título
+# 3. Endpoint para obtener score de un título
 @app.get('/score_titulo/{titulo}')
 def score_titulo(titulo: str):
+    # Normaliza el título ingresado por el usuario
     titulo_normalizado = normalizar_texto(titulo.lower())
-    df = modelo.cargar_datos(["title", "release_year", "vote_average"])
-    pelicula = df[df["title"].str.lower() == titulo_normalizado]
     
-    if pelicula.empty:
+    # Llama a la función del modelo para obtener el score y el año de estreno
+    score_info = modelo.obtener_score_titulo(titulo_normalizado)  # Asegúrate de que esta función esté bien implementada en tu modelo.
+    
+    # Verifica si se encontró información del título
+    if score_info is None:  # Cambié esta línea para chequear None
         raise HTTPException(status_code=404, detail="Título no encontrado")
     
-    resultado = pelicula.iloc[0]
+    # Retorna la respuesta al cliente
     return {
-        "mensaje": f"La película {titulo.capitalize()} fue estrenada en el año {resultado['release_year']} con un score de {resultado['vote_average']}"
+        "mensaje": f"La película {titulo.capitalize()} fue estrenada en el año {score_info['release_year']} "
+                   f"con un score de {score_info['vote_average']}"
     }
-
-# 4. Endpoint para votos de un título
+    
+# 4. Endpoint para obtener votos de un título
 @app.get('/votos_titulo/{titulo}')
 def votos_titulo(titulo: str):
     titulo_normalizado = normalizar_texto(titulo.lower())
-    df = modelo.cargar_datos(["title", "release_year", "vote_count", "vote_average"])
-    pelicula = df[df["title"].str.lower() == titulo_normalizado]
+    votos_info = modelo.obtener_votos_titulo(titulo_normalizado)
     
-    if pelicula.empty:
-        raise HTTPException(status_code=404, detail="Título no encontrado")
-    
-    resultado = pelicula.iloc[0]
-    
-    if resultado["vote_count"] < 2000:
-        raise HTTPException(status_code=400, detail="La película no cumple con el mínimo de 2000 valoraciones")
+    # Verifica si se obtuvo información de votos
+    if votos_info is None:
+        raise HTTPException(status_code=404, detail="Título no encontrado o no cumple con el mínimo de 2000 valoraciones")
     
     return {
-        "mensaje": f"La película {titulo.capitalize()} fue estrenada en el año {resultado['release_year']}. "
-                   f"La misma cuenta con un total de {resultado['vote_count']} valoraciones, con un promedio de {resultado['vote_average']}"
+        "mensaje": f"La película {titulo.capitalize()} fue estrenada en el año {votos_info['release_year']}. "
+                   f"Cuenta con {votos_info['vote_count']} valoraciones, con un promedio de {votos_info['vote_average']}"
     }
 
-# 5. Endpoint información de actor
-@app.get("/actor/{nombre_actor}")
+# 5. Endpoint para obtener información de un actor
+@app.get('/actor/{nombre_actor}')
 def get_actor(nombre_actor: str):
     nombre_actor_normalizado = normalizar_texto(nombre_actor.lower())
-    df = modelo.cargar_datos(["actor_names", "return"])
-    peliculas_actor = df[df['actor_names'].str.contains(nombre_actor_normalizado, case=False, na=False)]
-
-    if peliculas_actor.empty:
-        raise HTTPException(status_code=404, detail="Actor no encontrado")
-
-    cantidad_peliculas = len(peliculas_actor)
-    retorno_total = peliculas_actor["return"].sum()
-    promedio_retorno = retorno_total / cantidad_peliculas if cantidad_peliculas > 0 else 0
-
+    actor_info = modelo.obtener_info_actor(nombre_actor_normalizado)
+    
+    # Verifica si se obtuvo información del actor
+    if actor_info is None:
+        return {"mensaje": "El actor no está en la base de datos o también es director, por lo que se excluye del análisis."}
+    
     return {
-        "mensaje": f"El actor {nombre_actor.capitalize()} ha participado en {cantidad_peliculas} películas, "
-                   f"con un retorno total de {retorno_total} y un promedio de retorno de {promedio_retorno:.2f} por película"
+        "mensaje": f"El actor {nombre_actor.capitalize()} ha participado en {actor_info['cantidad_peliculas']} películas, "
+                   f"con un retorno total de {actor_info['retorno_total']} y un promedio de retorno de {actor_info['promedio_retorno']:.2f} por película"
     }
 
-# 6. Endpoint para información de un director
+# 6. Endpoint para obtener información de un director
 @app.get('/get_director/{nombre_director}')
 def get_director(nombre_director: str):
     nombre_director_normalizado = normalizar_texto(nombre_director.lower())
-    df = modelo.cargar_datos(["director_names", "title", "release_date", "return", "budget", "revenue"])
-    peliculas_director = df[df["director_names"].str.contains(nombre_director_normalizado, na=False)]
+    director_info = modelo.obtener_info_director(nombre_director_normalizado)
     
-    if peliculas_director.empty:
+    if director_info is None:
         raise HTTPException(status_code=404, detail="Director no encontrado")
-    
-    info_peliculas = []
-    
-    for _, pelicula in peliculas_director.iterrows():
-        info_peliculas.append({
-            "titulo": pelicula["title"].capitalize(),
-            "fecha": pelicula["release_date"].date(),
-            "retorno": pelicula["return"],
-            "costo": pelicula["budget"],
-            "ganancia": pelicula["revenue"] - pelicula["budget"]
-        })
     
     return {
         "mensaje": f"El director {nombre_director.capitalize()} tiene las siguientes películas:",
-        "peliculas": info_peliculas
+        "peliculas": director_info
     }
+
 
 # 7. Endpoint para recomendaciones
 @app.get('/recomendacion/{titulo}')
@@ -140,4 +120,3 @@ def recomendacion(titulo: str):
         }
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
-
