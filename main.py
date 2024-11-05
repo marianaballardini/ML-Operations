@@ -129,15 +129,3 @@ def get_director(nombre_director: str):
         "peliculas": info_peliculas
     }
 
-# 7. Endpoint para recomendaciones
-@app.get('/recomendacion/{titulo}')
-def recomendacion(titulo: str):
-    """Recomienda películas similares a partir de un título."""
-    try:
-        recomendaciones = modelo.recomendar(titulo)
-        return {
-            "mensaje": f"Recomendaciones para la película '{titulo}':",
-            "recomendaciones": recomendaciones
-        }
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
