@@ -13,11 +13,9 @@ class ModeloRecomendacion:
         """Carga el DataFrame desde el archivo parquet."""
         try:
             self.df = pd.read_parquet(self.dataset_path)
+            print("Columnas disponibles:", self.df.columns)  # Verifica las columnas cargadas
             if self.df is None or self.df.empty:
-                raise ValueError("El DataFrame está vacío o no se ha cargado correctamente.")
-            # Comprobación de la columna 'features'
-            if 'features' not in self.df.columns:
-                raise ValueError("Falta la columna 'features' en el DataFrame.")
+                print("El DataFrame está vacío o no se ha cargado correctamente.")
         except Exception as e:
             print(f"Error al cargar el archivo: {e}")
             self.df = None
