@@ -63,55 +63,89 @@ __Instrucciones de uso:__
 <u>Deploy en Render:</u> Despliegue de la API para que esté disponible en línea.
 
 
-La API estará disponible en http://127.0.0.1:8000.
-
+La API estará disponible en http://127.0.0.1:8000.  
 
 
 **Endpoints disponibles**
 
-**Cantidad de filmaciones por mes:**
-URL: /cantidad_filmaciones_mes/{mes}
-Método: GET
-Parámetros: mes (str): Nombre del mes en español (ej. "enero").
-Respuesta: Número de películas estrenadas en el mes especificado.
+**Cantidad de filmaciones por mes:**  
+
+URL: /cantidad_filmaciones_mes/{mes}  
+
+Método: GET  
+
+Parámetros: mes (str): Nombre del mes en español (ej. "enero").  
+
+Respuesta: Número de películas estrenadas en el mes especificado.  
 
 
-**Cantidad de filmaciones por día:**
-URL: /cantidad_filmaciones_dia/{dia}
-Método: GET
-Parámetros: dia (str): Nombre del día en español (ej. "lunes").
-Respuesta: Número de películas estrenadas en el día especificado.
 
-**Score de un título:**
-URL: /score_titulo/{titulo}
-Método: GET
-Parámetros: titulo (str): Título de la película.
-Respuesta: Año de estreno y score de la película.
+**Cantidad de filmaciones por día:**  
 
+URL: /cantidad_filmaciones_dia/{dia}  
 
-**Votos de un título:**
-URL: /votos_titulo/{titulo}
-Método: GET
-Parámetros: titulo (str): Título de la película.
-Respuesta: Información sobre el total de votos y promedio.
+Método: GET  
+
+Parámetros: dia (str): Nombre del día en español (ej. "lunes").  
+
+Respuesta: Número de películas estrenadas en el día especificado.  
 
 
-**Información de un actor:**
-URL: /actor/{nombre_actor}
-Método: GET
-Parámetros: nombre_actor (str): Nombre del actor.
-Respuesta: Información sobre las películas del actor.
+**Score de un título:**  
+
+URL: /score_titulo/{titulo}  
+
+Método: GET  
+
+Parámetros: titulo (str): Título de la película.  
+
+Respuesta: Año de estreno y score de la película.  
 
 
-**Información de un director:**
-URL: /get_director/{nombre_director}
-Método: GET
-Parámetros: nombre_director (str): Nombre del director.
-Respuesta: Lista de películas del director y sus detalles.
+
+**Votos de un título:**  
+
+URL: /votos_titulo/{titulo}  
+
+Método: GET  
+
+Parámetros: titulo (str): Título de la película.  
+
+Respuesta: Información sobre el total de votos y promedio.  
 
 
-**Recomendación de películas:**
-URL: /recomendacion/{titulo}
-Método: GET
-Parámetros: titulo (str): Título de la película.
-Respuesta: Lista de títulos de películas recomendadas.
+
+**Información de un actor:**  
+
+URL: /actor/{nombre_actor}  
+
+Método: GET  
+
+Parámetros: nombre_actor (str): Nombre del actor.  
+
+Respuesta: Información sobre las películas del actor.  
+
+
+
+**Información de un director:**  
+
+URL: /get_director/{nombre_director}  
+
+Método: GET  
+
+Parámetros: nombre_director (str): Nombre del director.  
+
+Respuesta: Lista de películas del director y sus detalles.  
+
+
+
+**Recomendación de películas:**  
+
+URL: /recomendacion/{titulo}  
+
+Método: GET  
+
+Parámetros: titulo (str): Título de la película.  
+
+Respuesta: Lista de títulos de películas recomendadas.  
+
