@@ -20,7 +20,7 @@ class ModeloRecomendacion:
         self.df['vote_average_scaled'] = MinMaxScaler().fit_transform(self.df[['vote_average']])
         
         # Crear la matriz TF-IDF
-        tfidf = TfidfVectorizer()
+        tfidf = TfidfVectorizer(max_features=300)
         feature_matrix = tfidf.fit_transform(self.df['features'])
         
         # Calcular la matriz de similitud
