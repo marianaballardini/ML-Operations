@@ -44,6 +44,8 @@ __Instrucciones de uso:__
 - Ejecuta la API con _uvicorn api:app --reload_
 
 
+
+
 **Características del Proyecto**
 
 <u> Carga y limpieza de datos:</u> Procesamiento inicial de los datos de películas para hacerlos adecuados para el análisis.
@@ -62,6 +64,8 @@ __Instrucciones de uso:__
 
 
 La API estará disponible en http://127.0.0.1:8000.
+
+
 
 **Endpoints disponibles**
 
