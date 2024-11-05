@@ -63,9 +63,6 @@ __Instrucciones de uso:__
 <u>Deploy en Render:</u> Despliegue de la API para que esté disponible en línea.
 
 
-La API estará disponible en http://127.0.0.1:8000.  
-
-
 **Endpoints disponibles**
 
 **Cantidad de filmaciones por mes:**  
