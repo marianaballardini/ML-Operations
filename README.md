@@ -147,6 +147,12 @@ Parámetros: titulo (str): Título de la película.
 Respuesta: Lista de títulos de películas recomendadas.  
 
 
+
+
+        ## Carga y limpieza de datos: ##  
+
+          Para este paso 
+
    ### ¿Qué es un Boxplot? ###
 
 Un boxplot, también conocido como diagrama de caja y bigotes, es una representación visual que resume la distribución de un conjunto de datos. Proporciona información sobre:
