@@ -45,6 +45,8 @@ __Instrucciones de uso:__
 
 
 
+La API estará disponible en:   https://ml-recomendaciones.onrender.com/docs
+      
 
 **Características del Proyecto**
 
@@ -161,42 +163,77 @@ Respuesta: Lista de títulos de películas recomendadas.
 
 ## EDA ##  
 
-# Distribución de la calificación promedio de las películas por año de estreno: #
-En este análisis, exploramos la evolución de las calificaciones de las películas a lo largo de los años utilizando un gráfico de boxplot. Al visualizar la distribución de las calificaciones por año de estreno, pudimos observar que:
-
-Variabilidad consistente: La dispersión de las calificaciones se mantuvo relativamente estable a lo largo del período analizado.
-Calificaciones promedio: Si bien hubo fluctuaciones anuales, no identificamos una tendencia clara de aumento o disminución en las calificaciones promedio.
-Valores atípicos: Notamos la presencia de algunas películas con calificaciones excepcionalmente altas o bajas en cada año, lo que sugiere la existencia de títulos que sobresalen o quedan por debajo de las expectativas generales.
-A partir de estos hallazgos, podemos concluir que, en general, la calidad percibida de las películas, según las calificaciones, ha mantenido un nivel relativamente constante a lo largo de los años. Sin embargo, es importante considerar que este análisis se basa en un conjunto de datos específico y que otros factores, como los géneros cinematográficos, las plataformas de distribución o los cambios en los hábitos de consumo, podrían influir en los resultados."
-
-# Gráfico de dispersión entre vote_average y revenue #  
-
-
-
-
-
-
-
-
-
-
-
-
-
-Análisis del Gráfico de barras 
+# Análisis del Gráfico de barras  #
 El gráfico muestra la distribución de películas por género. Cada barra representa un género y su altura indica la cantidad de películas que pertenecen a ese género.
 
 Observaciones clave:
 
-Géneros más populares: Se pueden identificar claramente los géneros con mayor cantidad de películas. Estos son los que tienen las barras más altas.
-Géneros menos populares: Los géneros con menos películas se representan con barras más cortas.
-Distribución: La distribución de películas entre los géneros no parece ser uniforme. Algunos géneros tienen una representación mucho mayor que otros.
+Desigualdad en la distribución: Se observa una gran disparidad en la cantidad de películas por género. Algunos géneros, como la comedia o el drama, tienen una representación mucho mayor que otros, como el western o el musical.
+Géneros dominantes: Los géneros con barras más largas son los más populares o los que tienen una mayor producción cinematográfica.  
+
+Géneros minoritarios: Los géneros con barras más cortas son menos comunes o tienen una producción más limitada.
+
+
+Interpretación:
+
+Este gráfico nos permite visualizar rápidamente cuáles son los géneros cinematográficos más populares y cuáles son menos frecuentes dentro del conjunto de datos analizado. También podemos identificar tendencias generales en la producción cinematográfica, como la predominancia de ciertos géneros sobre otros.
+
+Se observa una clara desigualdad en la representación de los diferentes géneros, con una predominancia de drama/thriller y drama/comedia y una menor presencia de war, history y foreign.
+
+Esta distribución refleja las tendencias generales de la producción cinematográfica, donde ciertos géneros suelen ser más comerciales y atractivos para el público en general. Sin embargo, es importante destacar que esta distribución puede variar dependiendo de la fuente de los datos y del período de tiempo analizado.
+
+# Gráfico de dispersión entre vote_average y revenue #  
+
+Descripción del Gráfico:
+
+Este gráfico de dispersión muestra la relación entre dos variables clave en la industria del cine: la calificación promedio de una película (en el eje X) y sus ingresos totales (en el eje Y). Cada punto en el gráfico representa una película individual.
+
+Interpretación de los Resultados:
+
+No existe una correlación lineal fuerte: A primera vista, es evidente que no hay una relación lineal directa entre la calificación promedio y los ingresos totales. Es decir, una película con una calificación alta no necesariamente genera mayores ingresos, y viceversa.
+Dispersión de los datos: Los puntos se encuentran dispersos en todo el gráfico, lo que indica una gran variabilidad en los resultados. Hay películas con calificaciones altas y bajos ingresos, así como películas con calificaciones bajas y altos ingresos.
+Concentración de películas con bajos ingresos: Se observa una concentración de puntos en la parte inferior del gráfico, lo que sugiere que la mayoría de las películas tienen ingresos relativamente bajos, independientemente de su calificación.
+Algunos casos excepcionales: Existen algunos puntos aislados que representan películas con calificaciones altas y muy altos ingresos. Estas películas podrían considerarse como "éxitos de taquilla" que han logrado combinar calidad y popularidad.  
+
+Conclusiones:
+
+La calificación no es el único factor determinante de los ingresos: Aunque una buena calificación puede contribuir al éxito comercial de una película, no es el único factor. Otros elementos como el presupuesto de marketing, el elenco, el género, la temporada de estreno y las tendencias del mercado también influyen significativamente en los ingresos.
+La relación entre calificación e ingresos es compleja: La relación entre estas dos variables es más compleja de lo que podría parecer a primera vista. Existen múltiples factores que interactúan y pueden producir resultados inesperados.
+La variabilidad es la norma: La industria cinematográfica es altamente competitiva y los resultados comerciales pueden variar ampliamente, incluso para películas con características similares.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 enfatiza que elegiste estas características por su relevancia conceptual y no solo por su correlación estadística. Puedes mencionar que, aunque género, director y país no tengan una correlación numérica fuerte, juegan un papel clave en el gusto de los usuarios, lo cual es fundamental para recomendaciones basadas en similitudes de contenido.
 
 
+Comentario Extenso para el README  DISPERSION 3D 
+Análisis de la relación entre calificación, cantidad de votos y año de estreno
 
+Este gráfico de dispersión en 3D nos permite visualizar la relación entre tres variables clave en el análisis de películas: el año de estreno, la calificación promedio y la cantidad de votos.
+
+Hallazgos clave:
+
+Distribución temporal: Observamos una concentración de películas en ciertos años, lo que podría indicar tendencias en la producción cinematográfica o en los hábitos de consumo de las audiencias.
+Correlación entre calificación y votos: Existe una tendencia general a que las películas con mayor cantidad de votos también tengan calificaciones más altas. Sin embargo, esta relación no es perfecta, y hay muchos casos de películas muy votadas con calificaciones moderadas o incluso bajas.
+Variabilidad en las calificaciones: Las calificaciones promedio de las películas varían considerablemente a lo largo de los años y entre diferentes películas, lo que sugiere que otros factores, como el género, el presupuesto o la popularidad de los actores, pueden influir en la percepción de la calidad por parte de la audiencia.
   
 
 
